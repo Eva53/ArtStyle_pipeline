@@ -20,25 +20,25 @@
         group: ubuntu
         mode: '0755'
 
-    - name: Copy files to remote server
-      ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: "{{ remote_dir }}/"
-      loop: "{{ local_files }}"
+    # - name: Copy files to remote server
+    #   ansible.builtin.copy:
+    #     src: "{{ item }}"
+    #     dest: "{{ remote_dir }}/"
+    #   loop: "{{ local_files }}"
 
-    - name: Extract .gz files
-      ansible.builtin.shell:
-        cmd: gunzip -f {{ remote_dir }}/*.gz
-      args:
-        warn: false
+    # - name: Extract .gz files
+    #   ansible.builtin.shell:
+    #     cmd: gunzip -f {{ remote_dir }}/*.gz
+    #   args:
+    #     warn: false
 
-    - name: Load Docker client image
-      ansible.builtin.shell:
-        cmd: docker load < {{ remote_dir }}/artstyle-client.tar
+    # - name: Load Docker client image
+    #   ansible.builtin.shell:
+    #     cmd: docker load < {{ remote_dir }}/artstyle-client.tar
 
-    - name: Load Docker server image
-      ansible.builtin.shell:
-        cmd: docker load < {{ remote_dir }}/artstyle-server.tar
+    # - name: Load Docker server image
+    #   ansible.builtin.shell:
+    #     cmd: docker load < {{ remote_dir }}/artstyle-server.tar
 
     # - name: Remove temporary .tar files
     #   ansible.builtin.file:
