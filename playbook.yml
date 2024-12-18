@@ -26,16 +26,16 @@
         dest: "{{ remote_dir }}/"
       loop: "{{ local_files }}"
 
-    - name: Check if Docker is installed
-      ansible.builtin.shell:
-        cmd: |
-          if ! command -v docker &> /dev/null; then
-            echo "Docker не найден"
-            exit 1
-          fi
-        warn: false
-      register: docker_check
-      failed_when: "'Docker не найден' in docker_check.stdout"
+    # - name: Check if Docker is installed
+    #   ansible.builtin.shell:
+    #     cmd: |
+    #       if ! command -v docker &> /dev/null; then
+    #         echo "Docker не найден"
+    #         exit 1
+    #       fi
+    #     warn: false
+    #   register: docker_check
+    #   failed_when: "'Docker не найден' in docker_check.stdout"
 
     - name: Extract .gz files
       ansible.builtin.shell:
