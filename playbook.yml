@@ -26,17 +26,6 @@
         dest: "{{ remote_dir }}/"
       loop: "{{ local_files }}"
 
-    # - name: Check if Docker is installed
-    #   ansible.builtin.shell:
-    #     cmd: |
-    #       if ! command -v docker &> /dev/null; then
-    #         echo "Docker не найден"
-    #         exit 1
-    #       fi
-    #     warn: false
-    #   register: docker_check
-    #   failed_when: "'Docker не найден' in docker_check.stdout"
-
     - name: Extract .gz files
       ansible.builtin.shell:
         cmd: gunzip -f {{ remote_dir }}/*.gz
@@ -51,11 +40,23 @@
       ansible.builtin.shell:
         cmd: docker load < {{ remote_dir }}/artstyle-server.tar
 
-    - name: Remove temporary .tar files
+    # - name: Remove temporary .tar files
+    #   ansible.builtin.file:
+    #     path: "{{ remote_dir }}/"
+    #     state: absent
+    #     pattern: "*.tar*"
+
+    - name: Find all .tar files in the directory
+      ansible.builtin.find:
+        paths: "{{ remote_dir }}"
+        patterns: "*.tar*"
+      register: tar_files
+
+    - name: Remove all .tar files
       ansible.builtin.file:
-        path: "{{ remote_dir }}/"
+        path: "{{ item.path }}"
         state: absent
-        pattern: "*.tar*"
+      with_items: "{{ tar_files.files }}"
 
     - name: Replace API_URL in .env file
       ansible.builtin.lineinfile:
